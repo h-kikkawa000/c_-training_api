@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+
+<sqlMap namespace="Auth" xmlns="http://ibatis.apache.org/mapping"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <alias>
+    <typeAlias alias="Auth" type="jp.co.matisse.web.education.infrastructure.repository.entity.Auth" />
+    <typeAlias alias="GetAuthenticationParam" type="jp.co.matisse.web.education.infrastructure.repository.entity.GetAuthenticationParam" />
+  </alias>
+
+  <resultMaps>
+    <resultMap id="result" class="Auth">
+      <result property="UserName" column="user_id" />
+      <result property="StaffKbn" column="staff_kbn" />
+      <result property="StaffDesc" column="staff_desc" />
+      <result property="StoreCode" column="store_code" />
+    </resultMap>
+  </resultMaps>
+
+  <statements>
+
+    <select id="getAuthentication" parameterClass="GetAuthenticationParam" resultMap="result">
+      <![CDATA[
+        select
+          usr.user_id,
+          usr.staff_kbn,
+          stf.staff_desc,
+          usr.store_code
+        from
+          mst_user as usr,
+          mst_staff as stf
+      where usr.staff_kbn = stf.staff_kbn
+      and   usr.user_id   = #UserId#
+      and   usr.user_pass = #UserPass#
+      ]]>
+    </select>
+  </statements>
+
+</sqlMap>

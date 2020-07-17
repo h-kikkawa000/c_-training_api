@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+
+<sqlMap namespace="Users" xmlns="http://ibatis.apache.org/mapping"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <alias>
+    <typeAlias alias="Users" type="jp.co.matisse.web.education.infrastructure.repository.entity.Users" />
+    <typeAlias alias="DeleteUserParam" type="jp.co.matisse.web.education.infrastructure.repository.entity.DeleteUserParam" />
+    <typeAlias alias="RegistUserParam" type="jp.co.matisse.web.education.infrastructure.repository.entity.RegistUserParam" />
+  </alias>
+
+  <resultMaps>
+    <resultMap id="GetAllUsersResult" class="Users">
+      <result property="Id" column="Id" />
+      <result property="UserId" column="UserId" />
+      <result property="UserPass" column="UserPass" />
+      <result property="StaffKbn" column="StaffKbn" />
+      <result property="StaffDesc" column="StaffDesc" />
+      <result property="StoreCode" column="StoreCode" />
+    </resultMap>
+
+    <resultMap id="GetUserIdResult" class="Users">
+      <result property="Id" column="Id" />
+    </resultMap>
+  </resultMaps>
+
+  <statements>
+    <select id="GetAllUsers"  resultMap="GetAllUsersResult">
+      <![CDATA[
+        select
+          usr.id as Id,
+		      usr.user_id as UserId,
+		      usr.user_pass as UserPass,
+          usr.staff_kbn as StaffKbn,
+          stf.staff_desc as StaffDesc,
+          usr.store_code as StoreCode
+        from
+          mst_user as usr,
+          mst_staff as stf
+      where usr.staff_kbn = stf.staff_kbn
+      order by 1
+      ]]>
+    </select>
+
+  <select id="GetUserId" resultMap="GetUserIdResult">
+    <![CDATA[
+        select 
+          max(usr.id) + 1 as Id
+        from mst_user as usr
+      ]]>
+  </select>
+
+    <insert id="AddUser" parameterClass="RegistUserParam">
+    <![CDATA[
+      insert into mst_user (
+        user_id,
+        user_pass,
+        staff_kbn,
+        store_code,
+        create_datetime
+      )values(
+        #UserId#,
+        #UserPass#,
+        #StaffKbn#,
+        #StoreCode#,
+        CURRENT_DATE
+      )
+      ]]>
+      <selectKey Property="Id" resultClass="int" type="post">
+        <![CDATA[
+          select currval ('mst_user_id_seq')
+        ]]>
+      </selectKey>
+    </insert>
+
+    <update id="UpdateUser" parameterClass="RegistUserParam">
+      <![CDATA[
+        update mst_user
+        set
+          user_id = #UserId#,
+          user_pass = #UserPass#,
+          staff_kbn = #StaffKbn#,
+          store_code = #StoreCode#
+        where
+          id = #Id#
+      ]]>
+    </update>
+    
+    <delete id="DeleteUser" parameterClass="DeleteUserParam">
+      <![CDATA[
+        delete from  mst_user where id = #Id#
+      ]]>
+    </delete>
+  </statements>
+</sqlMap>
