@@ -11,8 +11,8 @@
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn>
-    <RootNamespace>jp.co.matisse.web.education</RootNamespace>
-    <AssemblyName>matisse</AssemblyName>
+    <RootNamespace>jp.co.c.web.education</RootNamespace>
+    <AssemblyName>c</AssemblyName>
     <ApplicationIcon />
     <OutputType>Exe</OutputType>
     <StartupObject />
